@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Growth Vault - Daily Consistency & History Hub</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-hover: rgba(255, 255, 255, 0.09);
+      --accent-purple: #a855f7;
+      --accent-cyan: #06b6d4;
+      --accent-pink: #ec4899;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 30px 15px;
+    }
+
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(to right, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+    }
+
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .glass-card:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+
+    .card-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-main);
+      border-bottom: 1px solid var(--glass-border);
+      padding-bottom: 12px;
+    }
+
+    /* Stats Section */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* Inputs & Buttons */
+    .input-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    input[type="text"], input[type="date"], textarea {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, textarea:focus {
+      border-color: var(--accent-purple);
+      box-shadow: 0 0 12px rgba(168, 85, 247, 0.3);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    button {
+      background: linear-gradient(135deg, var(--accent-purple), #7c3aed);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 22px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+      white-space: nowrap;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
+    }
+
+    button.btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      box-shadow: none;
+    }
+
+    button.btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Task List */
+    ul { list-style: none; }
+
+    li {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.2s ease;
+    }
+
+    li:hover { background: var(--glass-hover); }
+
+    li.completed span {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .btn-delete {
+      background: rgba(239, 68, 68, 0.2);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+    }
+
+    .btn-delete:hover {
+      background: rgba(239, 68, 68, 0.5);
+      box-shadow: none;
+    }
+
+    /* History Viewer */
+    .history-card {
+      background: rgba(6, 182, 212, 0.05);
+      border: 1px solid rgba(0, 242, 254, 0.2);
+    }
+
+    .history-display {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 12px;
+      padding: 15px;
+      margin-top: 15px;
+    }
+
+    .history-display h4 {
+      color: var(--accent-cyan);
+      margin-bottom: 8px;
+    }
+
+    .footer-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Growth Vault</h1>
+      <p>Apna daily progress, tasks aur highlights stylishly track & store karein</p>
+    </header>
+
+    <!-- 1. Stats Card -->
+    <div class="glass-card">
+      <div class="card-title">🔥 Consistency & Activity Overview</div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number" id="streakCount">0</div>
+          <div class="stat-label">Current Streak (Days)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="totalActiveDays">0</div>
+          <div class="stat-label">Total Active Days</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="completedTasksCount">0</div>
+          <div class="stat-label">Tasks Completed</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Daily Highlight / Gratitude -->
+    <div class="glass-card">
+      <div class="card-title">✨ Today's Highlight (Aaj kya achha hua?)</div>
+      <textarea id="goodNotesInput" placeholder="Aaj ka sabse achha moment, achhi baatein ya koi jeet yahan likhein..."></textarea>
+      <div style="text-align: right; margin-top: 12px;">
+        <button onclick="saveTodayHighlight()">Save Today's Memory</button>
+      </div>
+    </div>
+
+    <!-- 3. Next Day To-Do -->
+    <div class="glass-card">
+      <div class="card-title">📌 Agle Din Ke Tasks (Next Day To-Do)</div>
+      <div class="input-row">
+        <input type="text" id="taskInput" placeholder="Naya task add karein...">
+        <button onclick="addTask()">Add Task</button>
+      </div>
+      <ul id="taskList"></ul>
+    </div>
+
+    <!-- 4. History Log / Purane Din Ka Record -->
+    <div class="glass-card history-card">
+      <div class="card-title">🔍 Purana Data / History Viewer (Kis din kya hua)</div>
+      <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 12px;">Kisi bhi pichli date ko select karke uska record dekhein:</p>
+      <div class="input-row">
+        <input type="date" id="historyDateSelect" onchange="viewPastHistory()">
+      </div>
+      <div class="history-display" id="historyViewBox">
+        <p style="color: var(--text-muted);">Kripya koi date chunein...</p>
+      </div>
+    </div>
+
+    <!-- Backup & Restore Data -->
+    <div class="footer-actions">
+      <button class="btn-secondary" onclick="exportData()">💾 Backup Data (JSON)</button>
+    </div>
+  </div>
+
+  <script>
+    const todayStr = new Date().toISOString().split('T')[0];
+
+    // Main database object in LocalStorage
+    let db = JSON.parse(localStorage.getItem('growth_vault_db')) || {
+      activityLog: [],
+      dailyHighlights: {},
+      tasks: []
+    };
+
+    window.onload = function() {
+      document.getElementById('historyDateSelect').value = todayStr;
+      logTodayActivity();
+      renderAll();
+    };
+
+    function saveDB() {
+      localStorage.setItem('growth_vault_db', JSON.stringify(db));
+      renderAll();
+    }
+
+    function logTodayActivity() {
+      if (!db.activityLog.includes(todayStr)) {
+        db.activityLog.push(todayStr);
+        saveDB();
+      }
+    }
+
+    function renderAll() {
+      renderStats();
+      renderTasks();
+      loadTodayHighlight();
+      viewPastHistory();
+    }
+
+    // Stats Logic
+    function renderStats() {
+      document.getElementById('totalActiveDays').innerText = db.activityLog.length;
+
+      let streak = 0;
+      let curr = new Date();
+      while (true) {
+        let dateKey = curr.toISOString().split('T')[0];
+        if (db.activityLog.includes(dateKey)) {
+          streak++;
+          curr.setDate(curr.getDate() - 1);
+        } else {
+          if (streak === 0 && dateKey === todayStr) {
+            curr.setDate(curr.getDate() - 1);
+            continue;
+          }
+          break;
+        }
+      }
+      document.getElementById('streakCount').innerText = streak;
+
+      const completed = db.tasks.filter(t => t.completed).length;
+      document.getElementById('completedTasksCount').innerText = completed;
+    }
+
+    // Highlight Logic
+    function saveTodayHighlight() {
+      const text = document.getElementById('goodNotesInput').value.trim();
+      if (!text) return;
+      db.dailyHighlights[todayStr] = text;
+      saveDB();
+      alert("Aaj ka highlight safe store kar liya gaya hai!");
+    }
+
+    function loadTodayHighlight() {
+      if (db.dailyHighlights[todayStr]) {
+        document.getElementById('goodNotesInput').value = db.dailyHighlights[todayStr];
+      }
+    }
+
+    // Task Logic
+    function addTask() {
+      const input = document.getElementById('taskInput');
+      const val = input.value.trim();
+      if (!val) return;
+
+      db.tasks.push({
+        id: Date.now(),
+        text: val,
+        dateAdded: todayStr,
+        completed: false
+      });
+      input.value = '';
+      saveDB();
+    }
+
+    function toggleTask(id) {
+      const task = db.tasks.find(t => t.id === id);
+      if (task) task.completed = !task.completed;
+      saveDB();
+    }
+
+    function deleteTask(id) {
+      db.tasks = db.tasks.filter(t => t.id !== id);
+      saveDB();
+    }
+
+    function renderTasks() {
+      const list = document.getElementById('taskList');
+      list.innerHTML = '';
+
+      db.tasks.forEach(t => {
+        const li = document.createElement('li');
+        if (t.completed) li.classList.add('completed');
+        li.innerHTML = `
+          <span onclick="toggleTask(${t.id})" style="cursor:pointer; flex:1;">${t.completed ? '✅' : '⭕'} ${t.text}</span>
+          <button class="btn-delete" onclick="deleteTask(${t.id})">Delete</button>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    // History Log Logic (Kis din kya hua)
+    function viewPastHistory() {
+      const selectedDate = document.getElementById('historyDateSelect').value;
+      const viewBox = document.getElementById('historyViewBox');
+
+      if (!selectedDate) {
+        viewBox.innerHTML = '<p style="color:var(--text-muted)">Kripya valid date chunein.</p>';
+        return;
+      }
+
+      const highlight = db.dailyHighlights[selectedDate] || "<i>Is din koi highlight note nahi tha.</i>";
+      const tasksOnDate = db.tasks.filter(t => t.dateAdded === selectedDate);
+
+      let taskHtml = '';
+      if (tasksOnDate.length === 0) {
+        taskHtml = '<p style="color:var(--text-muted); font-size:0.85rem;">Is date ko koi tasks add nahi kiye gaye the.</p>';
+      } else {
+        taskHtml = '<ul>' + tasksOnDate.map(t => `<li style="margin:5px 0; padding:8px 12px;"><span>${t.completed ? '✅' : '❌'} ${t.text}</span></li>`).join('') + '</ul>';
+      }
+
+      viewBox.innerHTML = `
+        <h4>Date: ${selectedDate}</h4>
+        <p style="margin-bottom: 10px;"><strong>Highlight:</strong> ${highlight}</p>
+        <p style="margin-bottom: 5px;"><strong>Created Tasks:</strong></p>
+        ${taskHtml}
+      `;
+    }
+
+    // Export/Backup Data
+    function exportData() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `GrowthVault_Backup_${todayStr}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    }
+  </script>
+</body>
+</html>
